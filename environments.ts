@@ -3,6 +3,8 @@
  * @type {string}
  * *****/
 
+import { Compass, Layout } from "lucide-react";
+
 export const BASEURL = "http://localhost:5000/api/v1";
 
 /***
@@ -36,7 +38,7 @@ export const SUBURLS = {
  *
  * ***/
 
-export const publicRoutes: string[] = ["/"];
+export const publicRoutes: string[] = [];
 
 /****
  * An array of routes thatr are used for authenticationgit
@@ -56,3 +58,16 @@ export const apiAuthPrefix = "/api/auth";
  * @type {string}
  * ***/
 export const DEFAULT_LOGIN_REDIRECT = "/settings";
+
+export const guestRoutes = [
+  {
+    icon: Layout,
+    label: "Dasboard",
+    href: "/",
+  },
+  {
+    icon: Compass,
+    label: "Browse",
+    href: "/search",
+  },
+];
