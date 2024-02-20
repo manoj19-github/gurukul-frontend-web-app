@@ -3,7 +3,7 @@
  * @type {string}
  * *****/
 
-import { Compass, Layout } from "lucide-react";
+import { BarChart, Compass, Layout, List } from "lucide-react";
 
 export const BASEURL = "http://localhost:5000/api/v1";
 
@@ -62,12 +62,24 @@ export const DEFAULT_LOGIN_REDIRECT = "/settings";
 export const guestRoutes = [
   {
     icon: Layout,
-    label: "Dasboard",
+    label: "Dashboard",
     href: "/",
   },
   {
     icon: Compass,
     label: "Browse",
     href: "/search",
+  },
+];
+export const teacherRoutes = [
+  {
+    icon: List,
+    label: "Courses",
+    href: "/teacher/courses",
+  },
+  {
+    icon: BarChart,
+    label: "Analytics",
+    href: "/teacher/analytics",
   },
 ];
