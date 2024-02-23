@@ -1,13 +1,14 @@
 "use client";
 
 import useMounted from "@/hooks/useMounted";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import {
   Form,
   FormControl,
@@ -19,26 +20,36 @@ import {
 } from "@/components/ui/form";
 
 import { Button } from "@/components/ui/button";
+import { getCookies, getCookie, setCookie, deleteCookie } from "cookies-next";
 
 import { Input } from "@/components/ui/input";
-
-const formSchema = z.object({
-  title: z.string().min(1, { message: "Title is required" }),
-});
+import { CrateCourseSchema } from "@/app/formSchema/createCourse.schema";
+import createCourseHandler from "@/app/services/createCourse.service";
 
 interface CreatePageProps {}
 
 const CreatePage: FC<CreatePageProps> = (): JSX.Element => {
   const isMounted = useMounted();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const router = useRouter();
+
+  const form = useForm<z.infer<typeof CrateCourseSchema>>({
+    resolver: zodResolver(CrateCourseSchema),
     defaultValues: {
       title: "",
     },
   });
   const { isSubmitting, isValid } = form.formState;
-  const onSubmitHandler = async (values: z.infer<typeof formSchema>) => {
+  const onSubmitHandler = async (values: z.infer<typeof CrateCourseSchema>) => {
     console.log(values);
+    await createCourseHandler({
+      values,
+      onSubmit: (response: any) => {
+        router.push(`/teacher/courses/${response.data.id}`);
+      },
+      onError: () => {
+        toast.error("something went wrong");
+      },
+    });
   };
 
   if (!isMounted) return <></>;

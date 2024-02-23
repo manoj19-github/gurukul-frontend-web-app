@@ -28,6 +28,7 @@ export const SUBURLS = {
     getLoggedInUser: "/auth/getloggedinuser",
     getUserByEmail: "/auth/getuserbyemail",
     verifyEmailForSocialLogin: "/auth/verifyemailforsociallogin",
+    createCourse: `/api/course`,
   },
 };
 
@@ -83,3 +84,4 @@ export const teacherRoutes = [
     href: "/teacher/analytics",
   },
 ];
+
