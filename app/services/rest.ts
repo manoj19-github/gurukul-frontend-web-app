@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig, AxiosInstance } from "axios";
 import { getCookies, getCookie, setCookie, deleteCookie } from "cookies-next";
 
 export default class RestService {
-  client: AxiosInstance;
+  private client: AxiosInstance;
   constructor(config: AxiosRequestConfig) {
     this.client = axios.create(config);
     this.client.interceptors.request.use(
@@ -32,7 +32,7 @@ export default class RestService {
           originalRequest._retry = true;
           console.log("error response token : ", error.response);
           if (error?.response?.data?.token) {
-            await setToken(error?.response?.data?.token);
+            // await setToken(error?.response?.data?.token);
             this.client.defaults.headers.common["Authorization"] =
               error.response?.data?.token;
             await new Promise((resolve) => setTimeout(resolve, 500));
@@ -59,6 +59,9 @@ export default class RestService {
   }
   delete(endpoint: string, payload: any) {
     return this.client.delete<any>(endpoint, payload);
+  }
+  patch(endpoint: string, payload: any) {
+    return this.client.patch<any>(endpoint, payload);
   }
 }
 

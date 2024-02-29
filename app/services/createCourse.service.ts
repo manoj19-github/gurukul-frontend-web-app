@@ -4,7 +4,7 @@ import { CrateCourseSchema } from "../formSchema/createCourse.schema";
 import { SUBURLS } from "@/environments";
 import { restClient } from "./rest";
 
-const createCourseHandler = async ({
+export const createCourseHandler = async ({
   values,
   onError,
   onSubmit,
@@ -15,11 +15,29 @@ const createCourseHandler = async ({
 }) => {
   try {
     console.log("hit ");
-    const response = await restClient.post("/api/course", values);
+    const response = await restClient.post("/api/courses", values);
     onSubmit?.(response);
   } catch (error) {
     console.log("error", error);
     onError?.();
   }
 };
-export default createCourseHandler;
+
+export const patchCourseTitleHandler = async ({
+  values,
+  onError,
+  onSubmit,
+  courseId,
+}: {
+  values: z.infer<typeof CrateCourseSchema>;
+  courseId: string;
+  onSubmit: any;
+  onError: any;
+}) => {
+  try {
+    await restClient.patch(`/api/courses/${courseId}`, values);
+    onSubmit?.();
+  } catch (error) {
+    onError?.();
+  }
+};
