@@ -17,7 +17,7 @@ import { Pencil } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { patchCourseTitleHandler } from "@/app/services/createCourse.service";
+import { patchCourseHandler } from "@/app/services/createCourse.service";
 
 interface TitleFormProps {
   initialData: { title: string };
@@ -43,7 +43,7 @@ const TitleForm: FC<TitleFormProps> = ({
     toast.success("Something went wrong");
   };
   const onSubmit = async (values: z.infer<typeof CrateCourseSchema>) => {
-    await patchCourseTitleHandler({
+    await patchCourseHandler({
       values,
       onError: errorCallback,
       courseId: courseId,
@@ -63,7 +63,7 @@ const TitleForm: FC<TitleFormProps> = ({
           ) : (
             <Fragment>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit Title
+              Edit
             </Fragment>
           )}
         </Button>

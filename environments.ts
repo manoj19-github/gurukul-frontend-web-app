@@ -39,7 +39,7 @@ export const SUBURLS = {
  *
  * ***/
 
-export const publicRoutes: string[] = [];
+export const publicRoutes: string[] = ["/", "/api/uploadthing"];
 
 /****
  * An array of routes thatr are used for authenticationgit

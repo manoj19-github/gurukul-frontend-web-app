@@ -1,44 +1,25 @@
 "use client";
 import React, { FC, Fragment, useState } from "react";
 import * as z from "zod";
-import axios from "axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  CrateCourseDescriptionSchema,
-  CrateCourseSchema,
-} from "@/app/formSchema/createCourse.schema";
+import { CrateImageSchema } from "@/app/formSchema/createCourse.schema";
 import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
+import { Course } from "@prisma/client";
+import Image from "next/image";
+import { FileUpload } from "@/components/ui/file-upload";
 import { patchCourseHandler } from "@/app/services/createCourse.service";
 
-interface DescriptionFormProps {
-  initialData: { description: string | null };
+interface ImageFormProps {
+  initialData: Course;
   courseId: string;
 }
-const DescriptionForm: FC<DescriptionFormProps> = ({
+const ImageForm: FC<ImageFormProps> = ({
   initialData,
   courseId,
 }): JSX.Element => {
   const router = useRouter();
-  const formController = useForm<z.infer<typeof CrateCourseDescriptionSchema>>({
-    resolver: zodResolver(CrateCourseDescriptionSchema),
-    defaultValues: { description: initialData.description ?? "" },
-  });
-  const { isSubmitting, isValid } = formController.formState;
-  console.log(formController.formState.errors);
   const successCallback = () => {
     toast.success("Course Description updated");
     router.refresh();
@@ -47,9 +28,7 @@ const DescriptionForm: FC<DescriptionFormProps> = ({
   const errorCallback = () => {
     toast.error("Something went wrong");
   };
-  const onSubmit = async (
-    values: z.infer<typeof CrateCourseDescriptionSchema>
-  ) => {
+  const onSubmit = async (values: z.infer<typeof CrateImageSchema>) => {
     await patchCourseHandler({
       values,
       onError: errorCallback,
@@ -57,32 +36,76 @@ const DescriptionForm: FC<DescriptionFormProps> = ({
       onSubmit: successCallback,
     });
   };
-  console.log("isValid : ", isValid);
-  console.log("isSubmitting : ", isSubmitting);
+
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const handleImage = (url: any) => {
+    console.log("url: ", url);
+    if (url) {
+      onSubmit({ imageUrl: url });
+    }
+  };
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course Description
+        Course Image
         <Button variant="ghost" onClick={() => setIsEditing((prev) => !prev)}>
-          {isEditing ? (
-            <Fragment>Cancel</Fragment>
-          ) : (
+          {!!isEditing ? <Fragment>Cancel</Fragment> : <></>}
+          {!isEditing && !initialData.imageUrl ? (
+            <Fragment>
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Add
+            </Fragment>
+          ) : !isEditing ? (
             <Fragment>
               <Pencil className="h-4 w-4 mr-2" />
               Edit
             </Fragment>
+          ) : (
+            <></>
           )}
         </Button>
       </div>
-      {!isEditing ? (
+
+      {!isEditing && !initialData.imageUrl ? (
+        <>
+          <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
+            <ImageIcon className="h-10 w-10 text-slate-500" />
+          </div>
+        </>
+      ) : initialData.imageUrl ? (
+        <div className="relative aspect-video mt-2">
+          <Image
+            alt="upload"
+            fill
+            className="object-cover rounded-md"
+            src={initialData.imageUrl}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
+      {!!isEditing ? (
+        <div>
+          <FileUpload
+            endpoint="courseImage"
+            onChange={(file: any) => handleImage(file)}
+          />
+          <div className="text-xs text muted-foreground mt-4">
+            16:9 aspect ratio recommended
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
+
+      {/* {!isEditing ? (
         <p
           className={cn(
             "text-sm mt-2 ",
-            !initialData.description ? "text-slate-500 italic" : ""
+            !initialData.imageUrl ? "text-slate-500 italic" : ""
           )}
         >
-          {initialData.description || "No description"}
+          {initialData.imageUrl || "No image"}
         </p>
       ) : (
         <>
@@ -115,9 +138,9 @@ const DescriptionForm: FC<DescriptionFormProps> = ({
             </form>
           </Form>
         </>
-      )}
+      )} */}
     </div>
   );
 };
 
-export default DescriptionForm;
+export default ImageForm;

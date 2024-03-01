@@ -23,13 +23,13 @@ export const createCourseHandler = async ({
   }
 };
 
-export const patchCourseTitleHandler = async ({
+export const patchCourseHandler = async ({
   values,
   onError,
   onSubmit,
   courseId,
 }: {
-  values: z.infer<typeof CrateCourseSchema>;
+  values: any;
   courseId: string;
   onSubmit: any;
   onError: any;

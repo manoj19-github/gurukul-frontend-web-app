@@ -6,6 +6,9 @@ export const CrateCourseSchema = z.object({
 export const CrateCourseDescriptionSchema = z.object({
   description: z.string().min(1, { message: "Description is required" }),
 });
+export const CrateImageSchema = z.object({
+  imageUrl: z.string().min(1, { message: "Image is required" }),
+});
 
 // export const createTitleForCourseSchema=z.object({
 //   title:
