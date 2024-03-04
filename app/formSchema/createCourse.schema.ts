@@ -10,6 +10,19 @@ export const CrateImageSchema = z.object({
   imageUrl: z.string().min(1, { message: "Image is required" }),
 });
 
+export const createCategorySchema = z.object({
+  categoryId: z.string().min(1),
+});
+export const createPriceSchema = z.object({
+  price: z.coerce.number().min(0),
+});
+
+export const createAttachmentSchema = z.object({
+  url: z.string().min(1),
+});
+
+
+
 // export const createTitleForCourseSchema=z.object({
 //   title:
 // })

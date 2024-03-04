@@ -57,8 +57,8 @@ export default class RestService {
   put(endpoint: string, payload: any) {
     return this.client.put<any>(endpoint, payload);
   }
-  delete(endpoint: string, payload: any) {
-    return this.client.delete<any>(endpoint, payload);
+  delete(endpoint: string) {
+    return this.client.delete<any>(endpoint);
   }
   patch(endpoint: string, payload: any) {
     return this.client.patch<any>(endpoint, payload);
