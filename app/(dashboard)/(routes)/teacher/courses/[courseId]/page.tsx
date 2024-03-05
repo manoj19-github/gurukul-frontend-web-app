@@ -17,6 +17,8 @@ import { getCategoriesData } from "@/app/services/getMasterData.service";
 import CategoriesForm from "./_components/CategoriesForm";
 import PriceForm from "./_components/PriceForm";
 import AttachmentsForm from "./_components/Attachments";
+import { getCourseDetailsService } from "@/app/services/getCourseDetails";
+import ChaptersForm from "./_components/ChaptersForm";
 
 interface CourseIdPageProps {
   params: { courseId: string };
@@ -24,16 +26,7 @@ interface CourseIdPageProps {
 const CourseIdPage: FC<CourseIdPageProps> = async ({ params }) => {
   const { userId } = auth();
   if (!userId) return redirect("/");
-  const course = await dbConfig.course.findUnique({
-    where: { id: params.courseId, userId },
-    include: {
-      attachements: {
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
-    },
-  });
+  const course = await getCourseDetailsService({ id: params.courseId, userId });
   if (!course) return redirect("/");
   const requiredFields = [
     course.title,
@@ -41,6 +34,7 @@ const CourseIdPage: FC<CourseIdPageProps> = async ({ params }) => {
     course.imageUrl,
     course.price,
     course.categoryId,
+    course.chapters.some((self) => self.isPublished),
   ];
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
@@ -79,7 +73,7 @@ const CourseIdPage: FC<CourseIdPageProps> = async ({ params }) => {
               <IconBadge icon={ListChecks} />
               <h2 className="text-xl">Course Chapter</h2>
             </div>
-            <div>todo :</div>
+            <ChaptersForm initialData={course} courseId={course.id} />
           </div>
           <div className="flex items-center gap-x-2">
             <IconBadge icon={BadgeIndianRupee} />

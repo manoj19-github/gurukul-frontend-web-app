@@ -41,3 +41,23 @@ export const patchCourseHandler = async ({
     onError?.();
   }
 };
+
+
+export const createChaptersService = async ({
+  courseId,
+  values,
+  onSuccessCallback,
+  onErrorCallback,
+}: {
+  courseId: string;
+  values: any;
+  onSuccessCallback: any;
+  onErrorCallback: any;
+}) => {
+  try {
+    await restClient.post(`/api/courses/${courseId}/chapters`, values);
+    onSuccessCallback?.();
+  } catch (error) {
+    onErrorCallback?.();
+  }
+};

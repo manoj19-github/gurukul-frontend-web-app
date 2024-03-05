@@ -21,6 +21,9 @@ export const createAttachmentSchema = z.object({
   url: z.string().min(1),
 });
 
+export const chaptersFormSchema = z.object({
+  title: z.string().min(1, "title is required"),
+});
 
 
 // export const createTitleForCourseSchema=z.object({
