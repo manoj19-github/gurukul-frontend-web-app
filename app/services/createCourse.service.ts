@@ -3,6 +3,7 @@ import { CrateCourseSchema } from "../formSchema/createCourse.schema";
 
 import { SUBURLS } from "@/environments";
 import { restClient } from "./rest";
+import toast from "react-hot-toast";
 
 export const createCourseHandler = async ({
   values,
@@ -42,7 +43,6 @@ export const patchCourseHandler = async ({
   }
 };
 
-
 export const createChaptersService = async ({
   courseId,
   values,
@@ -58,6 +58,33 @@ export const createChaptersService = async ({
     await restClient.post(`/api/courses/${courseId}/chapters`, values);
     onSuccessCallback?.();
   } catch (error) {
+    onErrorCallback?.();
+  }
+};
+
+export const onReOrderChapterService = async ({
+  id,
+  position,
+  courseId,
+  onErrorCallback,
+  onSuccessCallback,
+  onLoading,
+}: {
+  onLoading: any;
+  id: string;
+  position: number[];
+  onSuccessCallback: any;
+  onErrorCallback: any;
+  courseId: string;
+}) => {
+  try {
+    onLoading();
+    await restClient.put(`/api/courses/${courseId}/chapter/reorder`, {
+      list: { id, position },
+    });
+    onSuccessCallback?.();
+  } catch (error: any) {
+    console.log(error);
     onErrorCallback?.();
   }
 };

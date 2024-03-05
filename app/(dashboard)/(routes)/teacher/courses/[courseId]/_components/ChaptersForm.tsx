@@ -25,9 +25,11 @@ import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import {
   createChaptersService,
+  onReOrderChapterService,
   patchCourseHandler,
 } from "@/app/services/createCourse.service";
 import { Chapter, Course } from "@prisma/client";
+import ChapterList from "./ChapterList";
 
 interface ChaptersFormProps {
   initialData: Course & { chapters: Chapter[] };
@@ -47,6 +49,7 @@ const ChaptersForm: FC<ChaptersFormProps> = ({
   const successCallback = () => {
     toast.success("Chapter successfully created");
     router.refresh();
+    formController.reset();
     setIsCreating(false);
     // setIsEditing(false);
   };
@@ -66,6 +69,32 @@ const ChaptersForm: FC<ChaptersFormProps> = ({
   console.log("isSubmitting : ", isSubmitting);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [isCreating, setIsCreating] = useState<boolean>(false);
+
+  const reorderError = () => {
+    toast.error("something went wrong");
+    setIsUpdating(false);
+  };
+  const reOrderSuccess = () => {
+    setIsUpdating(false);
+    router.refresh();
+  };
+
+  const onReorderHandler = async ({
+    id,
+    position,
+  }: {
+    id: string;
+    position: number[];
+  }) => {
+    await onReOrderChapterService({
+      id,
+      position,
+      courseId,
+      onErrorCallback: reorderError,
+      onSuccessCallback: reOrderSuccess,
+      onLoading: () => setIsUpdating(true),
+    });
+  };
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
@@ -124,6 +153,15 @@ const ChaptersForm: FC<ChaptersFormProps> = ({
         >
           {!initialData.chapters.length ? "No Chapters " : ""}
         </div>
+      ) : (
+        <></>
+      )}
+      {initialData.chapters.length > 0 ? (
+        <ChapterList
+          onEdit={() => {}}
+          onReorder={() => {}}
+          items={initialData.chapters || []}
+        />
       ) : (
         <></>
       )}
