@@ -24,7 +24,7 @@ import { getCookies, getCookie, setCookie, deleteCookie } from "cookies-next";
 
 import { Input } from "@/components/ui/input";
 import { CrateCourseSchema } from "@/app/formSchema/createCourse.schema";
-import { createCourseHandler } from "@/app/services/createCourse.service";
+import { createCourseHandler } from "@/app/services/courseRelated.service";
 
 interface CreatePageProps {}
 

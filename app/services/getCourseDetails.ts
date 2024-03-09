@@ -27,3 +27,26 @@ export const getCourseDetailsService = async ({
     console.log("error: ", error);
   }
 };
+
+
+export const getChapterDetails = async ({
+  chapterId,
+  courseId,
+}: {
+  chapterId: string;
+  courseId: string;
+}) => {
+  try {
+    return await dbConfig.chapter.findUnique({
+      where: {
+        id: chapterId,
+        courseId,
+      },
+      include: {
+        muxData: true,
+      },
+    });
+  } catch (error) {
+    console.log("error : ", error);
+  }
+};

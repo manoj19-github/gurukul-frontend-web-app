@@ -27,7 +27,7 @@ import {
   createChaptersService,
   onReOrderChapterService,
   patchCourseHandler,
-} from "@/app/services/createCourse.service";
+} from "@/app/services/courseRelated.service";
 import { Chapter, Course } from "@prisma/client";
 import ChapterList from "./ChapterList";
 
@@ -74,21 +74,20 @@ const ChaptersForm: FC<ChaptersFormProps> = ({
     toast.error("something went wrong");
     setIsUpdating(false);
   };
-  const reOrderSuccess = () => {
+  const reOrderSuccess = (successMessage: string) => {
     setIsUpdating(false);
+    toast.success(successMessage);
     router.refresh();
   };
 
-  const onReorderHandler = async ({
-    id,
-    position,
-  }: {
-    id: string;
-    position: number[];
-  }) => {
+  const onReorderHandler = async (
+    updatedData: {
+      id: string;
+      position: number;
+    }[]
+  ) => {
     await onReOrderChapterService({
-      id,
-      position,
+      updatedData,
       courseId,
       onErrorCallback: reorderError,
       onSuccessCallback: reOrderSuccess,
@@ -158,9 +157,10 @@ const ChaptersForm: FC<ChaptersFormProps> = ({
       )}
       {initialData.chapters.length > 0 ? (
         <ChapterList
-          onEdit={() => {}}
-          onReorder={() => {}}
+          onEdit={(id: string) => onEditChapterHandler(id)}
+          onReorder={onReorderHandler}
           items={initialData.chapters || []}
+          isUpdating={isUpdating}
         />
       ) : (
         <></>

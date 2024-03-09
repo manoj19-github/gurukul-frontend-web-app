@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
-import { patchCourseHandler } from "@/app/services/createCourse.service";
+import { patchCourseHandler } from "@/app/services/courseRelated.service";
 import { Category } from "@prisma/client";
 import { ComboBox } from "@/components/ui/combobox";
 

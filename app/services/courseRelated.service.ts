@@ -63,28 +63,51 @@ export const createChaptersService = async ({
 };
 
 export const onReOrderChapterService = async ({
-  id,
-  position,
+  updatedData,
   courseId,
   onErrorCallback,
   onSuccessCallback,
   onLoading,
 }: {
+  updatedData: Array<{ id: string; position: number }>;
   onLoading: any;
-  id: string;
-  position: number[];
   onSuccessCallback: any;
   onErrorCallback: any;
   courseId: string;
 }) => {
   try {
     onLoading();
-    await restClient.put(`/api/courses/${courseId}/chapter/reorder`, {
-      list: { id, position },
-    });
-    onSuccessCallback?.();
+    const response = await restClient.put(
+      `/api/courses/${courseId}/chapters/reorder`,
+      {
+        list: [...updatedData],
+      }
+    );
+    console.log("response : ", response);
+    onSuccessCallback?.(response?.data?.message || "");
   } catch (error: any) {
     console.log(error);
+    onErrorCallback?.();
+  }
+};
+
+export const editChaptersAction = ({
+  values,
+  startLoading,
+  onSuccessCallback,
+  onErrorCallback,
+}: {
+  values: any;
+  startLoading: any;
+  onErrorCallback: any;
+  onSuccessCallback: any;
+}) => {
+  try {
+    startLoading?.();
+
+    onSuccessCallback?.();
+  } catch (error: any) {
+    console.log("error : ", error);
     onErrorCallback?.();
   }
 };

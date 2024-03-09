@@ -17,7 +17,7 @@ import { Pencil } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { patchCourseHandler } from "@/app/services/createCourse.service";
+import { patchCourseHandler } from "@/app/services/courseRelated.service";
 
 interface TitleFormProps {
   initialData: { title: string };

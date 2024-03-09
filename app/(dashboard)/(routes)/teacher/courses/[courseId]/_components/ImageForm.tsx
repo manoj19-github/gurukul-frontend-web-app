@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { Course } from "@prisma/client";
 import Image from "next/image";
 import { FileUpload } from "@/components/ui/file-upload";
-import { patchCourseHandler } from "@/app/services/createCourse.service";
+import { patchCourseHandler } from "@/app/services/courseRelated.service";
 
 interface ImageFormProps {
   initialData: Course;
