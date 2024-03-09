@@ -1,9 +1,12 @@
 import { getChapterDetails } from "@/app/services/getCourseDetails";
+import { IconBadge } from "@/components/IconBadge";
 import { auth } from "@clerk/nextjs";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React, { FC } from "react";
+import ChapterTitleForm from "./_components/ChapterTitleForm";
+import ChapterDescription from "./_components/ChapterDescriptionForm";
 
 interface ChapterByIdPageProps {
   params: { courseId: string; chapterId: string };
@@ -37,6 +40,34 @@ const ChapterByIdPage: FC<ChapterByIdPageProps> = async ({
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to course setup
           </Link>
+          <div className="flex items-center justify-between w-full mt-2 ">
+            <div className="flex flex-col gap-y-1">
+              <h1 className="text-2xl font-medium">Chapter Creation</h1>
+              <span className="text-sm text-slate-700">
+                Complete all fields {completionText}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        <div className="space-y-4">
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={LayoutDashboard} />
+              <h2 className="text-xl">Customize your chapter</h2>
+            </div>
+            <ChapterTitleForm
+              initialData={chapterDetails}
+              courseId={params.courseId}
+              chapterId={params.chapterId}
+            />
+            <ChapterDescription
+              initialData={chapterDetails}
+              courseId={params.courseId}
+              chapterId={params.chapterId}
+            />
+          </div>
         </div>
       </div>
     </div>

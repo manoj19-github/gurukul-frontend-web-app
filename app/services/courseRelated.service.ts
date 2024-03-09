@@ -91,23 +91,3 @@ export const onReOrderChapterService = async ({
   }
 };
 
-export const editChaptersAction = ({
-  values,
-  startLoading,
-  onSuccessCallback,
-  onErrorCallback,
-}: {
-  values: any;
-  startLoading: any;
-  onErrorCallback: any;
-  onSuccessCallback: any;
-}) => {
-  try {
-    startLoading?.();
-
-    onSuccessCallback?.();
-  } catch (error: any) {
-    console.log("error : ", error);
-    onErrorCallback?.();
-  }
-};
