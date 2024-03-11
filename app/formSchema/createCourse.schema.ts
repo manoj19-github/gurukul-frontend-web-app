@@ -25,6 +25,14 @@ export const chaptersFormSchema = z.object({
   title: z.string().min(1, "title is required"),
 });
 
+export const chapterAccessFormSchema = z.object({
+  isFree: z.boolean().default(false),
+});
+
+export const ChapterVideoFormSchema = z.object({
+  videoUrl: z.string().min(1),
+});
+
 
 // export const createTitleForCourseSchema=z.object({
 //   title:
