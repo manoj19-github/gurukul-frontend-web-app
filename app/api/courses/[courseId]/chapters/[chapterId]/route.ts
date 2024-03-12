@@ -2,7 +2,12 @@ import { dbConfig } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { normalizeRouteRegex } from "next/dist/lib/load-custom-routes";
 import { NextResponse } from "next/server";
+import Mux from "@mux/mux-node";
 
+const MuxInstance = new Mux({
+  tokenId: process.env.MUX_TOKEN_ID!,
+  tokenSecret: process.env.MUX_TOKEN_SECRET!,
+});
 export async function PATCH(
   req: Request,
   { params }: { params: { courseId: string; chapterId: string } }
@@ -29,6 +34,39 @@ export async function PATCH(
       },
       data: {
         ...values,
+      },
+    });
+    if (
+      !values.videoUrl ||
+      values.videoUrl === "" ||
+      values.videoUrl?.trim() === ""
+    )
+      return NextResponse.json(updatedChapter, { status: 200 });
+    const existingMuxData = await dbConfig.muxData.findFirst({
+      where: {
+        chapterId: params.chapterId,
+      },
+    });
+    if (!!existingMuxData) {
+      await Promise.all([
+        MuxInstance.video.assets.delete(existingMuxData.assetId),
+        dbConfig.muxData.delete({
+          where: {
+            id: existingMuxData.id,
+          },
+        }),
+      ]);
+    }
+    const asset = await MuxInstance.video.assets.create({
+      input: values.videoUrl,
+      playback_policy: ["public"],
+      test: false,
+    });
+    await dbConfig.muxData.create({
+      data: {
+        chapterId: params.chapterId,
+        assetId: asset.id,
+        playbackId: asset.playback_ids?.[0]?.id,
       },
     });
     return NextResponse.json(updatedChapter, { status: 200 });
