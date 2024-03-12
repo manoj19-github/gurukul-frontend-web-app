@@ -11,6 +11,7 @@ import Image from "next/image";
 import { FileUpload } from "@/components/ui/file-upload";
 import { patchCourseHandler } from "@/app/services/courseRelated.service";
 import { editChaptersAction } from "@/app/services/chapterRelated.service";
+import MuxPlayer from "@mux/mux-player-react";
 
 interface ChapterVideoFormProps {
   initialData: Chapter & { muxData?: MuxData | null };
@@ -86,7 +87,7 @@ const ChapterVideoForm: FC<ChapterVideoFormProps> = ({
             className="object-cover rounded-md"
             src={initialData.videoUrl}
           /> */}
-          video uploaded
+          <MuxPlayer playbackId={initialData?.muxData?.playbackId || ""} />
         </div>
       ) : (
         <></>

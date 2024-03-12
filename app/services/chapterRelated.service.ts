@@ -25,3 +25,27 @@ export const editChaptersAction = async ({
     onErrorCallback?.();
   }
 };
+
+
+export const deleteChapterAction = async ({
+  values,
+  startLoading,
+  onSuccessCallback,
+  onErrorCallback,
+}: {
+  values: { courseId: string; chapterId: string };
+  startLoading: () => void;
+  onSuccessCallback: any;
+  onErrorCallback: any;
+}) => {
+  try {
+    startLoading?.();
+    await restClient.delete(
+      `/api/courses/${values.courseId}/chapters/${values.chapterId}`
+    );
+    onSuccessCallback?.();
+  } catch (error: any) {
+    console.log(error);
+    onErrorCallback?.();
+  }
+};
