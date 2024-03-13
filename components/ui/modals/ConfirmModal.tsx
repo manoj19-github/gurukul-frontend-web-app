@@ -15,10 +15,12 @@ import {
 interface ConfirmModalProps {
   children: ReactNode;
   onConfirm: () => void;
+  disabled: boolean;
 }
 const ConfirmModal: FC<ConfirmModalProps> = ({
   children,
   onConfirm,
+  disabled,
 }): JSX.Element => {
   return (
     <AlertDialog>
@@ -28,8 +30,10 @@ const ConfirmModal: FC<ConfirmModalProps> = ({
           <AlertDialogTitle>This action cannot be undone</AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>Continue</AlertDialogAction>
+          <AlertDialogCancel disabled={disabled}>Cancel</AlertDialogCancel>
+          <AlertDialogAction disabled={disabled} onClick={onConfirm}>
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -49,3 +49,30 @@ export const deleteChapterAction = async ({
     onErrorCallback?.();
   }
 };
+
+export const handlePublishAndUnPublish = async ({
+  values,
+  isPublished,
+  startLoading,
+  onErrorCallback,
+  onSuccessCallback,
+}: {
+  values: { courseId: string; chapterId: string };
+  isPublished: boolean;
+  startLoading: any;
+  onErrorCallback: any;
+  onSuccessCallback: any;
+}) => {
+  try {
+    startLoading?.();
+    await restClient.patch(
+      `/api/courses/${values.courseId}/chapters/${values.chapterId}/${
+        !isPublished ? `publish` : `unpublish`
+      }`
+    );
+    onSuccessCallback?.();
+  } catch (error) {
+    console.log("error occured", error);
+    onErrorCallback?.();
+  }
+};

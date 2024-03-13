@@ -12,6 +12,7 @@ import { FileUpload } from "@/components/ui/file-upload";
 import { patchCourseHandler } from "@/app/services/courseRelated.service";
 import { editChaptersAction } from "@/app/services/chapterRelated.service";
 import MuxPlayer from "@mux/mux-player-react";
+import ReactPlayer from "react-player/lazy";
 
 interface ChapterVideoFormProps {
   initialData: Chapter & { muxData?: MuxData | null };
@@ -80,14 +81,20 @@ const ChapterVideoForm: FC<ChapterVideoFormProps> = ({
           </div>
         </Fragment>
       ) : initialData.videoUrl ? (
-        <div className="relative aspect-video mt-2">
+        <div className="relative aspect-video mt-2 ">
           {/* <Image
             alt="upload"
             fill
             className="object-cover rounded-md"
             src={initialData.videoUrl}
           /> */}
-          <MuxPlayer playbackId={initialData?.muxData?.playbackId || ""} />
+          {/* <MuxPlayer playbackId={initialData?.muxData?.playbackId || ""} /> */}
+          <ReactPlayer
+            url={initialData.videoUrl}
+            controls
+            width="100%"
+            height="100%"
+          />
         </div>
       ) : (
         <></>

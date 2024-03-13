@@ -12,11 +12,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  CrateCourseDescriptionSchema,
-  CrateCourseSchema,
-  chapterAccessFormSchema,
-} from "@/app/formSchema/createCourse.schema";
+import { chapterAccessFormSchema } from "@/app/formSchema/createCourse.schema";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -44,7 +40,7 @@ const ChapterAccessForm: FC<ChapterAccessFormProps> = ({
   const router = useRouter();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const formController = useForm<z.infer<typeof chapterAccessFormSchema>>({
-    resolver: zodResolver(CrateCourseDescriptionSchema),
+    resolver: zodResolver(chapterAccessFormSchema),
     defaultValues: { isFree: Boolean(initialData.isFree) },
   });
   const { isSubmitting, isValid } = formController.formState;
@@ -59,6 +55,7 @@ const ChapterAccessForm: FC<ChapterAccessFormProps> = ({
     setIsEditing(false);
   };
   const onSubmit = async (values: z.infer<typeof chapterAccessFormSchema>) => {
+    console.log("values: ", values);
     await editChaptersAction({
       values: { ...values, chapterId, courseId },
       onErrorCallback: errorCallback,

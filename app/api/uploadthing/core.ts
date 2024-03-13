@@ -1,7 +1,6 @@
 import { auth } from "@clerk/nextjs";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
-
+import { UTApi } from "uploadthing/server";
 const f = createUploadthing();
 
 const handleAuth = () => {
@@ -10,6 +9,7 @@ const handleAuth = () => {
   return { userId };
 };
 
+export const utAPI = new UTApi();
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
   courseImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })

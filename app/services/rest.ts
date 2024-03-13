@@ -60,7 +60,7 @@ export default class RestService {
   delete(endpoint: string) {
     return this.client.delete<any>(endpoint);
   }
-  patch(endpoint: string, payload: any) {
+  patch(endpoint: string, payload?: any) {
     return this.client.patch<any>(endpoint, payload);
   }
 }

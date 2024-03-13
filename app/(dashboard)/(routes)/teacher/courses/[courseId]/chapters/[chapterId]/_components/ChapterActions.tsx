@@ -1,5 +1,8 @@
 "use client";
-import { deleteChapterAction } from "@/app/services/chapterRelated.service";
+import {
+  deleteChapterAction,
+  handlePublishAndUnPublish,
+} from "@/app/services/chapterRelated.service";
 import { Button } from "@/components/ui/button";
 import ConfirmModal from "@/components/ui/modals/ConfirmModal";
 import { Trash, Trash2 } from "lucide-react";
@@ -26,6 +29,11 @@ const ChapterActions: FC<ChapterActionsProps> = ({
     setIsLoading(false);
     router.refresh();
   };
+  const onPublishUnPublishCallback = () => {
+    toast.success("Chapter Deleted Successfully");
+    setIsLoading(false);
+    router.refresh();
+  };
   const onDeleteErrorCallback = () => {
     toast.error("Something went wrong");
     setIsLoading(false);
@@ -38,17 +46,29 @@ const ChapterActions: FC<ChapterActionsProps> = ({
       onSuccessCallback: onDeleteSuccessCallback,
     });
   };
+  const onPublishAndUnPublishAction = () => {
+    handlePublishAndUnPublish({
+      startLoading: () => setIsLoading(true),
+      values: { courseId, chapterId },
+      onErrorCallback: onDeleteErrorCallback,
+      onSuccessCallback: onPublishUnPublishCallback,
+      isPublished,
+    });
+  };
   return (
     <div className="flex items-center gap-x-2">
       <Button
-        onClick={onDeleteConfirmHandler}
-        disabled={disabled}
+        onClick={onPublishAndUnPublishAction}
+        disabled={disabled || isLoading}
         variant={"outline"}
         size="sm"
       >
         {isPublished ? "Unpublish" : "Publish"}
       </Button>
-      <ConfirmModal onConfirm={() => {}}>
+      <ConfirmModal
+        onConfirm={() => onDeleteConfirmHandler()}
+        disabled={isLoading}
+      >
         <Button size="sm" variant={"outline"}>
           <Trash2 className="h-4 w-4 text-red-500" />
         </Button>
